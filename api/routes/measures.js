@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../db");
+const pool = require("../../db");
 
 router.get("/", async (req, res) => {
     res.json((await pool.query("SELECT * FROM measures")).rows);

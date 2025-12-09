@@ -1,5 +1,10 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { pool } from "./db/pool.js";
+import clientRoutes from "./routes/client.js";
+import caseRoutes from "./routes/case.js";
+import placeRoutes from "./routes/place.js";
 
 const clientRoutes = require('./routes/client');
 const caseRoutes = require('./routes/case');
@@ -17,6 +22,6 @@ app.use('/place', placeRoutes);
 app.use('/images', imageRoutes);
 app.use('/measures', measureRoutes);
 
-app.listen(3000, () => {
-    console.log('API is running on port 3000');
+app.get("/", (req, res) => {
+  res.send("API Online.");
 });

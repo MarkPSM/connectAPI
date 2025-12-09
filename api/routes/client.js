@@ -4,14 +4,31 @@ const pool = require("../db");
 
 // GET todos os clientes
 router.get("/", async (req, res) => {
-    const result = await pool.query("SELECT * FROM client");
-    res.json(result.rows);
+    try {
+        const result = await pool.query("SELECT * FROM client");
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erro ao buscar clientes" });
+    }
 });
 
 // GET cliente por ID
 router.get("/:id", async (req, res) => {
-    const result = await pool.query("SELECT * FROM client WHERE ID = $1", [req.params.id]);
-    res.json(result.rows[0]);
+    try {
+        const { id } = req.params;
+
+        const client = await pool.query("SELECT * FROM client WHERE ID = $1", [id]);
+        const cases = await pool.query('SELECT * FROM "case" WHERE IDClient = $1', [id]);
+
+        res.json({
+            client: client.rows[0],
+            cases: cases.rows
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erro ao buscar cliente" });
+    }
 });
 
 // POST criar cliente
